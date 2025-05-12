@@ -21,6 +21,9 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("user disconnected: ", socket.id);
   });
+  socket.on("image", (image) => {
+    io.emit("image", image);
+  });
 });
 
 const PORT = process.env.PORT || 3000;
