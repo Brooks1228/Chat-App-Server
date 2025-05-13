@@ -10,19 +10,26 @@ const io = new Server(server, {
   },
 });
 
+const messages = [];
+
 io.on("connection", (socket) => {
   console.log("user connected: ", socket.id);
-
-  socket.on("message", (msg) => {
-    console.log("message revieved: ", msg);
-    io.emit("message", msg); //broadcast to all clients
-  });
 
   socket.on("disconnect", () => {
     console.log("user disconnected: ", socket.id);
   });
   socket.on("image", (image) => {
     io.emit("image", image);
+  });
+
+  socket.on("getLastMessages", () => {
+    const lastMessages = messages.slice(-20);
+    socket.emit("lastMessages", lastMessages);
+  });
+
+  socket.on("message", (msg) => {
+    messages.push(msg);
+    io.emit("message", msg);
   });
 });
 
