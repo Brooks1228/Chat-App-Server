@@ -34,7 +34,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("triggerConfetti", () => {
-    io.emit("playConfetti"); // Broadcast confetti event to all clients
+    io.emit("playConfetti");
   });
 });
 
