@@ -18,6 +18,12 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("user disconnected: ", socket.id);
   });
+
+  socket.on("message", (msg) => {
+    messages.push(msg);
+    io.emit("message", msg);
+  });
+
   socket.on("image", (image) => {
     io.emit("image", image);
   });
@@ -27,9 +33,8 @@ io.on("connection", (socket) => {
     socket.emit("lastMessages", lastMessages);
   });
 
-  socket.on("message", (msg) => {
-    messages.push(msg);
-    io.emit("message", msg);
+  socket.on("triggerConfetti", () => {
+    io.emit("playConfetti"); // Broadcast confetti event to all clients
   });
 });
 
