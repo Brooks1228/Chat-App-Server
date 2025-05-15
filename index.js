@@ -21,6 +21,10 @@ io.on("connection", (socket) => {
 
   socket.on("message", (msg) => {
     messages.push(msg);
+    if (messages.length > 20) {
+      messages.shift();
+    }
+    console.log(messages);
     io.emit("message", msg);
   });
 
@@ -29,8 +33,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("getLastMessages", () => {
-    const lastMessages = messages.slice(-20);
-    socket.emit("lastMessages", lastMessages);
+    // const lastMessages = messages.slice(-20);
+    socket.emit("lastMessages", messages);
   });
 
   socket.on("triggerConfetti", () => {
