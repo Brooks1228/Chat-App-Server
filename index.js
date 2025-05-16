@@ -19,12 +19,28 @@ io.on("connection", (socket) => {
     console.log("user disconnected: ", socket.id);
   });
 
-  socket.on("message", (msg) => {
+  socket.on("message", (msgText) => {
+    console.log("message revieved: ", msgText);
+    const msg = {
+      user: socket.username || "anonymous",
+      text: msgText,
+      room: socket.room || "global",
+    };
     messages.push(msg);
     if (messages.length > 20) {
       messages.shift();
     }
     console.log(messages);
+
+    if (socket.room) {
+      io.to(socket.room).emit("message", msg);
+    } else {
+      socket.emit("message", {
+        user: "👤 system",
+        text: "you must join a room first",
+      });
+    }
+
     io.emit("message", msg);
   });
 
@@ -39,6 +55,13 @@ io.on("connection", (socket) => {
 
   socket.on("triggerConfetti", () => {
     io.emit("playConfetti");
+  });
+
+  socket.on("joinRoom", ({ username, room }) => {
+    socket.username = username;
+    socket.room = room;
+    socket.join(room);
+    console.log(`${username} joined room ${room}`);
   });
 });
 
