@@ -41,7 +41,7 @@ io.on("connection", (socket) => {
       });
     }
 
-    io.emit("message", msg);
+    //io.emit("message", msg);
   });
 
   socket.on("image", (image) => {
